@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Task 2 - Intermediate Web Development</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        header {
+            background-color: #006d5b;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        h3 {
+            margin-top: 0;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+        }
+
+        button {
+            background-color: #006d5b;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #004c41;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            background: #e0e0e0;
+            margin-top: 5px;
+            padding: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+        }
+
+        .success {
+            color: green;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h2>Task 2 – Intermediate HTML, CSS & JavaScript</h2>
+</header>
+
+<div class="container">
+
+    <!-- CONTACT FORM -->
+    <div class="box">
+        <h3>Contact Form</h3>
+        <form id="contactForm">
+            <input type="text" id="name" placeholder="Name">
+            <input type="email" id="email" placeholder="Email">
+            <button type="submit">Submit</button>
+            <p id="message"></p>
+        </form>
+    </div>
+
+    <!-- TO-DO LIST -->
+    <div class="box">
+        <h3>To-Do List</h3>
+        <input type="text" id="taskInput" placeholder="Enter a task">
+        <button onclick="addTask()">Add Task</button>
+        <ul id="taskList"></ul>
+    </div>
+
+</div>
+
+<script>
+    // FORM VALIDATION
+    document.getElementById("contactForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        let name = document.getElementById("name").value.trim();
+        let email = document.getElementById("email").value.trim();
+        let message = document.getElementById("message");
+
+        if (name === "" || email === "") {
+            message.textContent = "All fields are required";
+            message.className = "error";
+            return;
+        }
+
+        let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+        if (!email.match(emailPattern)) {
+            message.textContent = "Invalid email format";
+            message.className = "error";
+            return;
+        }
+
+        message.textContent = "Form submitted successfully!";
+        message.className = "success";
+    });
+
+    // TO-DO LIST (DOM MANIPULATION)
+    function addTask() {
+        let input = document.getElementById("taskInput");
+        let task = input.value.trim();
+
+        if (task === "") return;
+
+        let li = document.createElement("li");
+        li.textContent = task;
+
+        let removeBtn = document.createElement("span");
+        removeBtn.textContent = "❌";
+        removeBtn.style.cursor = "pointer";
+        removeBtn.onclick = function () {
+            li.remove();
+        };
+
+        li.appendChild(removeBtn);
+        document.getElementById("taskList").appendChild(li);
+
+        input.value = "";
+    }
+</script>
+
+</body>
+</html>
