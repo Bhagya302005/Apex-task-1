@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Styling and JavaScript - Task 3</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+
+        header {
+            background-color: #1976d2;
+            color: white;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .container {
+            background: white;
+            max-width: 600px;
+            margin: 30px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        img {
+            width: 220px;
+            height: auto;
+            margin: 15px 0;
+        }
+
+        button {
+            padding: 8px 16px;
+            margin: 5px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #joke {
+            margin: 15px 0;
+            font-size: 16px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 480px) {
+            header {
+                font-size: 16px;
+            }
+
+            img {
+                width: 180px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    Advanced Styling and JavaScript - Task 3
+</header>
+
+<div class="container">
+
+    <h2>Image Carousel</h2>
+    <img id="carouselImage" src="images/img1.png" alt="Carousel Image"><br>
+    <button onclick="prevImage()">Previous</button>
+    <button onclick="nextImage()">Next</button>
+
+    <h2>Fetch Data from API</h2>
+    <p id="joke">Click the button to fetch data</p>
+    <button onclick="getJoke()">Get New Joke</button>
+
+</div>
+
+<script>
+    /* Image Carousel */
+    const images = [
+        "images/img1.png",
+        "images/img2.png",
+        "images/img3.png"
+    ];
+
+    let index = 0;
+
+    function nextImage() {
+        index = (index + 1) % images.length;
+        document.getElementById("carouselImage").src = images[index];
+    }
+
+    function prevImage() {
+        index = (index - 1 + images.length) % images.length;
+        document.getElementById("carouselImage").src = images[index];
+    }
+
+    /* Fetch API */
+    function getJoke() {
+        fetch("https://official-joke-api.appspot.com/random_joke")
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("joke").innerText =
+                    data.setup + " " + data.punchline;
+            })
+            .catch(() => {
+                document.getElementById("joke").innerText =
+                    "Error fetching data";
+            });
+    }
+</script>
+
+</body>
+</html>
