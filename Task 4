@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task 4 – Full Project Implementation</title>
+
+<style>
+/* ---------- GLOBAL ---------- */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f4f6f8;
+}
+header {
+  background: #0a7cff;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+nav a {
+  color: white;
+  margin: 0 12px;
+  text-decoration: none;
+  font-weight: bold;
+}
+section {
+  padding: 25px;
+}
+h2 {
+  color: #0a7cff;
+}
+
+/* ---------- PORTFOLIO ---------- */
+.card {
+  background: white;
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* ---------- TODO ---------- */
+#todo input {
+  padding: 8px;
+  width: 70%;
+}
+#todo button {
+  padding: 8px;
+}
+li {
+  list-style: none;
+  padding: 8px;
+  background: #eee;
+  margin-top: 5px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* ---------- PRODUCTS ---------- */
+.controls {
+  margin-bottom: 15px;
+}
+.product {
+  background: white;
+  padding: 15px;
+  margin: 10px;
+  border-radius: 8px;
+  display: inline-block;
+  width: 200px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+footer {
+  text-align: center;
+  padding: 10px;
+  background: #0a7cff;
+  color: white;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>My Full Web Project</h1>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#todo">To-Do</a>
+    <a href="#products">Products</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<!-- ABOUT -->
+<section id="about">
+  <h2>About Me</h2>
+  <div class="card">
+    <p>Hello! I am a Computer Science student. This project demonstrates my skills in HTML, CSS, JavaScript, localStorage, filtering, and sorting.</p>
+  </div>
+</section>
+
+<!-- TODO APP -->
+<section id="todo">
+  <h2>To-Do App (Local Storage)</h2>
+  <input type="text" id="taskInput" placeholder="Enter task">
+  <button onclick="addTask()">Add</button>
+  <ul id="taskList"></ul>
+</section>
+
+<!-- PRODUCTS -->
+<section id="products">
+  <h2>Product Listing</h2>
+
+  <div class="controls">
+    <select id="categoryFilter" onchange="displayProducts()">
+      <option value="all">All</option>
+      <option value="electronics">Electronics</option>
+      <option value="fashion">Fashion</option>
+    </select>
+
+    <select id="sortPrice" onchange="displayProducts()">
+      <option value="default">Sort by Price</option>
+      <option value="low">Low to High</option>
+      <option value="high">High to Low</option>
+    </select>
+  </div>
+
+  <div id="productList"></div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <h2>Contact</h2>
+  <div class="card">
+    <p>Email: example@email.com</p>
+    <p>LinkedIn: linkedin.com/in/yourprofile</p>
+  </div>
+</section>
+
+<footer>
+  Task-4 | Full Project Implementation
+</footer>
+
+<script>
+/* ---------- TODO LOGIC ---------- */
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+function addTask() {
+  let input = document.getElementById("taskInput");
+  if (input.value === "") return;
+
+  tasks.push(input.value);
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  input.value = "";
+  renderTasks();
+}
+
+function renderTasks() {
+  let list = document.getElementById("taskList");
+  list.innerHTML = "";
+  tasks.forEach((task, index) => {
+    let li = document.createElement("li");
+    li.innerHTML = task + 
+      `<button onclick="deleteTask(${index})">X</button>`;
+    list.appendChild(li);
+  });
+}
+
+function deleteTask(index) {
+  tasks.splice(index, 1);
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  renderTasks();
+}
+
+renderTasks();
+
+/* ---------- PRODUCTS ---------- */
+const products = [
+  { name: "Laptop", price: 50000, category: "electronics" },
+  { name: "Headphones", price: 2000, category: "electronics" },
+  { name: "T-Shirt", price: 800, category: "fashion" },
+  { name: "Shoes", price: 3000, category: "fashion" }
+];
+
+function displayProducts() {
+  let category = document.getElementById("categoryFilter").value;
+  let sort = document.getElementById("sortPrice").value;
+  let filtered = [...products];
+
+  if (category !== "all") {
+    filtered = filtered.filter(p => p.category === category);
+  }
+
+  if (sort === "low") filtered.sort((a,b)=>a.price-b.price);
+  if (sort === "high") filtered.sort((a,b)=>b.price-a.price);
+
+  let container = document.getElementById("productList");
+  container.innerHTML = "";
+
+  filtered.forEach(p => {
+    container.innerHTML += `
+      <div class="product">
+        <h4>${p.name}</h4>
+        <p>₹${p.price}</p>
+        <p>${p.category}</p>
+      </div>
+    `;
+  });
+}
+
+displayProducts();
+</script>
+
+</body>
+</html>
